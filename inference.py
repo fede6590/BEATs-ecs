@@ -1,24 +1,45 @@
 import torch
 import torchaudio
+import time
 import logging
-import sys
-import io
+import streamlit as st
 
-from app import device
+from model.BEATs import BEATs, BEATsConfig
 
 
-# Logs
+class StreamlitLogHandler(logging.Handler):
+    def emit(self, record):
+        log_message = self.format(record)
+        st.text(log_message)  # You can also use st.write
+
+
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-logger.addHandler(logging.StreamHandler(sys.stdout))
+logger.setLevel(logging.DEBUG)
+logger.addHandler(StreamlitLogHandler())
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+model = None
 
 
-def pre_process(audio_bytes):
-    wf, sr = torchaudio.load(io.BytesIO(audio_bytes))
-    logger.info(f"Sample rate = {sr}")
-    if sr != 16000:
-        logger.info("Resampling...")
+def load_model(location):
+    global model
+    if model is None:
+        checkpoint = torch.load(location)
+        cfg = BEATsConfig(checkpoint['cfg'])
+        model = BEATs(cfg)
+        model.load_state_dict(checkpoint['model'])
+        model.eval()
+        logger.info(f"Model loaded to {device}")
+    else:
+        logger.info(f"Model already on {device}")
+    return model.to(device)
+
+
+def pre_process(wav_file, sr0):
+    wf, sr = torchaudio.load(wav_file)
+    if sr != sr0:
         wf = torchaudio.transforms.Resample(sr, 16000)(wf)
+        logger.info(f"Resampled from {sr} to {sr0}")
     return wf.to(device)
 
 
@@ -37,27 +58,24 @@ def get_label(label_pred):
             return "No Value"
 
 
-def predict(model, audio_bytes):
+def predict(uploaded_file):
+    model = load_model('model.pt')
     try:
-        data = pre_process(audio_bytes)
+        data = pre_process(uploaded_file, 16000)  # Sample Rate = 16kHz
         logger.info("Data ready")
 
         with torch.no_grad():
             logger.info("Sending to model...")
+            t0 = time.time()
             pred = model.extract_features(data, padding_mask=None)[0]
-        logger.info("Inference done")
+        logger.info(f"Inference done ({round(time.time() - t0, 3)} s)")
 
-        label_pred = pred.topk(k=5)
+        label_pred = pred.topk(k=1)
         label = get_label(label_pred)
         logger.info(f"Label: {label}")
 
-        return {
-            'statusCode': 200,
-            'class': label,
-        }
+        return label
+
     except Exception as e:
         logger.error("An error occurred: %s", e)
-        return {
-            'statusCode': 500,
-            'class': None
-        }
+        return f'ERROR ({e})'

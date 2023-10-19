@@ -10,7 +10,7 @@
 import math
 import warnings
 import torch
-from torch import Tensor, nn
+from torch import nn
 import torch.nn.functional as F
 
 
@@ -216,4 +216,3 @@ def quant_noise(module, p, block_size):
 
     module.register_forward_pre_hook(_forward_pre_hook)
     return module
-

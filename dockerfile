@@ -1,20 +1,17 @@
-# app/Dockerfile
-
-FROM python:3.10-slim-bookworm
-
-RUN useradd -m dev
-USER dev
+FROM python:3.11-slim-bookworm
 
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y \
-    build-essential \
-    curl \
-    software-properties-common \
-    git \
-    && rm -rf /var/lib/apt/lists/*
+  ffmpeg \
+  curl \
+  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN git clone https://github.com/
+COPY model.pt .
+COPY app.py .
+COPY inference.py .
+COPY requirements.txt .
+COPY model/ /app/model
 
 RUN --mount=type=cache,target=/root/.cache/pip \
     pip install --no-cache-dir -r requirements.txt

@@ -1,9 +1,7 @@
-# -f https://pypi-browser.org/package/torch/torch-2.0.1-cp311-cp311-manylinux2014_aarch64.whl
-# -f https://pypi-browser.org/package/torchaudio/torchaudio-2.0.2-cp311-cp311-manylinux2014_aarch64.whl
-# -f https://pypi-browser.org/package/numpy/numpy-1.25.2-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
-# -f https://pypi-browser.org/package/boto3/boto3-1.28.25-py3-none-any.whl
-torch~=2.0
-torchaudio~=2.0
+-f https://download.pytorch.org/whl/cpu/torchaudio-2.1.0%2Bcpu-cp311-cp311-linux_x86_64.whl#sha256=b78575dc4748e57046b396a85470bb3615fa7822b745ff091ded073bd036eb6e
+-f https://download.pytorch.org/whl/cpu/torch-2.1.0%2Bcpu-cp311-cp311-linux_x86_64.whl#sha256=5954924ce74bc7e6a6c811e3fa4bdda9936d9889f6369fd068420c444bfd1cae
+torch~=2.1
+torchaudio~=2.1
 numpy~=1.25
 boto3~=1.28
 streamlit~=1.27
