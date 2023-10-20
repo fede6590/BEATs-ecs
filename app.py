@@ -1,16 +1,20 @@
 import streamlit as st
 
-from inference import predict
+from middleware import upload_to_s3, inference
+
+BUCKET = 's3-sqs-lambda-ecs'
 
 
 def main():
     st.title("Audio Clasification with BEATs")
-    uploaded_file = st.file_uploader("Upload an audio file", type=["wav"])
+    audio_file = st.file_uploader("Upload an audio file", type=["wav"])
 
-    if uploaded_file is not None:
-        prediction = predict(uploaded_file)
-        st.audio(uploaded_file, format="audio/wav")
-        st.write(f"Prediction: {prediction}")
+    if audio_file is not None:
+        # with open(audio_file, "rb") as f:
+        upload_to_s3(audio_file, BUCKET)
+        label, code = inference()
+        st.audio(audio_file, format="audio/wav")
+        st.write(f"Prediction: {label} (code:{code})")
 
 
 if __name__ == '__main__':

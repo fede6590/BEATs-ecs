@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
 COPY model.pt .
 COPY app.py .
 COPY inference.py .
+COPY middleware.py .
 COPY requirements.txt .
 COPY model/ /app/model
 
