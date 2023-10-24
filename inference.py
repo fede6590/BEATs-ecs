@@ -68,7 +68,7 @@ def predict(audio_path):
             logger.info("Sending to model...")
             t0 = time.time()
             pred = model.extract_features(data, padding_mask=None)[0]
-        logger.info(f"Inference done ({round(time.time() - t0, 3)} s)")
+        logger.info(f"Inference accomplished: {round(time.time() - t0, 3)} s")
 
         label_pred = pred.topk(k=1)
         label, code = get_label(label_pred)
