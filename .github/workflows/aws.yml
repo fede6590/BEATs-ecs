@@ -3,7 +3,7 @@ name: BEATs deployment (SmartHome)
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   create-docker-image:
