@@ -45,4 +45,4 @@ jobs:
  
       - name: Update ECS service
         run: |
-          aws ecs update-service --cluster BEATs-cluster --service beats-service --task-definition BEATs-ecs-task --force-new-deployment
+          aws ecs update-service --cluster BEATs-cluster --service beats-service --task-definition BEATs-ecs-task --force-new-deployment --desired-count 1
