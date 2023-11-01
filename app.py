@@ -59,7 +59,7 @@ def inference():
                     t0 = time()
                     data = json.loads(message['Body'])
                     audio_path, file_key = download_audio(data)
-                    label, code = predict(audio_path)
+                    label, code = predict(model, audio_path)
                     delete_audio(audio_path)
 
                     response = {

@@ -45,7 +45,7 @@ def get_label(label_pred):
             return "No value", 100
 
 
-def predict(audio_path):
+def predict(model, audio_path):
     try:
         data = pre_process(audio_path, 16000)  # Sample Rate = 16kHz
 
