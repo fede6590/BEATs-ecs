@@ -23,7 +23,6 @@ def download_audio(event):
     input_bucket_name = event['Records'][0]['s3']['bucket']['name']
     file_key = event['Records'][0]['s3']['object']['key']
     local_input_temp_file = "/tmp/" + file_key.replace('/', '-')
-    logger.info(f"File_name: {local_input_temp_file}")
     s3.download_file(input_bucket_name, file_key, local_input_temp_file)
     audio_path = local_input_temp_file
     return audio_path, file_key
@@ -71,7 +70,7 @@ def inference():
                     receipt_handle = message['ReceiptHandle']
                     sqs_client.delete_message(QueueUrl=queue_in, ReceiptHandle=receipt_handle)
                     send_message_to_queue(response, file_key)
-                    logger.info(f'Pipeline accomplished: {round(time() - t0, 3)} s')
+                    logger.info(f'Time: {round(time() - t0, 3)}s - Response: {response}')
 
         except Exception as e:
             logger.error(f'Error: {str(e)}')

@@ -50,13 +50,10 @@ def predict(model, audio_path):
         data = pre_process(audio_path, 16000)  # Sample Rate = 16kHz
 
         with torch.no_grad():
-            t0 = time.time()
             pred = model.extract_features(data, padding_mask=None)[0]
-        logger.info(f"Inference accomplished: {round(time.time() - t0, 3)} s")
 
         label_pred = pred.topk(k=1)
         label, code = get_label(label_pred)
-        logger.info(f"Label: {label} (code: {code})")
 
         return label, code
 
