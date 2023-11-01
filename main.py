@@ -31,7 +31,7 @@ def pre_process(wav_file, sr0):
 
 
 def get_label(label_pred):
-    index_list = label_pred[1][0].tolist() 
+    index_list = label_pred[1][0].tolist()
     for value in range(len(index_list)):
         if index_list[value] in [20, 404, 520, 151, 515, 522, 429, 199, 50, 433, 344, 34, 413, 244, 155, 245, 242]:
             return "Speech", 202
@@ -40,7 +40,7 @@ def get_label(label_pred):
         elif index_list[value] in [323, 149, 339, 480, 488, 400, 150, 157]:
             return "Dog", 201
         elif index_list[value] in [335, 221, 336, 277]:
-            return "Cat", 202
+            return "Cat", 203
         elif value == 4:
             return "No value", 100
 
@@ -51,7 +51,7 @@ def predict(model, audio_path):
 
         with torch.no_grad():
             pred = model.extract_features(data, padding_mask=None)[0]
-
+    
         label_pred = pred.topk(k=1)
         label, code = get_label(label_pred)
 
