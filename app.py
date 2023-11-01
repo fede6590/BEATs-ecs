@@ -7,10 +7,8 @@ from uuid import uuid4
 from main import predict, logger, load_model
 
 
-# queue_in = os.environ['SC_SQS_INPUT']
-queue_in = 'https://sqs.us-east-1.amazonaws.com/410677554255/s3-queue-ecs'
-# queue_out = os.environ['SC_SQS_OUTPUT']
-queue_out = 'https://sqs.us-east-1.amazonaws.com/410677554255/ecs-output.fifo'
+queue_in = os.environ['SC_SQS_INPUT']
+queue_out = os.environ['SC_SQS_OUTPUT']
 
 
 region_name = 'us-east-1'
