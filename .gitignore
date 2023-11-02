@@ -1,3 +1,4 @@
 *.pt
 *.wav
+*.ipynb
 __pycache__

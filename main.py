@@ -1,6 +1,5 @@
 import torch
 import torchaudio
-import time
 import logging
 import sys
 
@@ -31,30 +30,35 @@ def pre_process(wav_file, sr0):
 
 
 def get_label(label_pred):
-    index_list = label_pred[1][0].tolist()
-    for value in range(len(index_list)):
-        if index_list[value] in [20, 404, 520, 151, 515, 522, 429, 199, 50, 433, 344, 34, 413, 244, 155, 245, 242]:
+    index_list = label_pred[1]
+    for i, code in enumerate(index_list, start=1):
+        if code in [20, 404, 520, 151, 515, 522, 429, 199, 50, 433, 344, 34, 413, 244, 155, 245, 242]:
             return "Speech", 202
-        elif index_list[value] in [284, 19, 473, 498, 395, 81, 431, 62, 410]:
+        elif code in [284, 19, 473, 498, 395, 81, 431, 62, 410]:
             return "Crying baby", 200
-        elif index_list[value] in [323, 149, 339, 480, 488, 400, 150, 157]:
+        elif code in [323, 149, 339, 480, 488, 400, 150, 157]:
             return "Dog", 201
-        elif index_list[value] in [335, 221, 336, 277]:
+        elif code in [335, 221, 336, 277]:
             return "Cat", 203
-        elif value == 4:
+        elif i == len(index_list):
             return "No value", 100
+
+
+def filt_prob(pred, k=5, thresh=0.5):
+    topk_pred = pred.topk(k=5)
+    mask = (topk_pred.values >= thresh)
+    probs = topk_pred.values[mask].tolist()
+    preds = topk_pred.indices[mask].tolist()
+    return [probs, preds]
 
 
 def predict(model, audio_path):
     try:
         data = pre_process(audio_path, 16000)  # Sample Rate = 16kHz
-
         with torch.no_grad():
             pred = model.extract_features(data, padding_mask=None)[0]
-    
-        label_pred = pred.topk(k=1)
+        label_pred = filt_prob(pred, k=5, thresh=0.1)
         label, code = get_label(label_pred)
-
         return label, code
 
     except Exception as e:
