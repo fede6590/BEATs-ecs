@@ -56,12 +56,13 @@ def inference():
                     t0 = time()
                     data = json.loads(message['Body'])
                     audio_path, file_key = download_audio(data)
-                    label, code = predict(model, audio_path)
+                    label, code, prob = predict(model, audio_path)
                     delete_audio(audio_path)
 
                     response = {
                         'classification_sound_id': f'{code}',
                         'classification_sound_description': label,
+                        'classification_sound_probability': prob,
                         'records_s3_object_key': file_key,
                         'request_id': str(uuid4()),
                     }
