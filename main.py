@@ -6,22 +6,13 @@ import os
 
 from model.BEATs import BEATs, BEATsConfig
 
-
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 logger.addHandler(logging.StreamHandler(sys.stdout))
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-if os.environ['TOPK']:
-    k = os.environ['TOPK']
-else:
-    k = 5
-
-if os.environ['THRESH']:
-    thresh = os.environ['THRESH']
-else:
-    thresh = .5
+k = os.environ.get("K", 5)
+thresh = os.environ.get('THRESH', .5)
 
 
 def load_model(location):

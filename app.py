@@ -6,17 +6,14 @@ from uuid import uuid4
 
 from main import predict, logger, load_model
 
-
-queue_in = os.environ['SC_SQS_INPUT']
-queue_out = os.environ['SC_SQS_OUTPUT']
-
-
 region_name = 'us-east-1'
 s3 = boto3.client('s3')
 sqs_client = boto3.client('sqs', region_name=region_name)
 
 location = 'model.pt'
 model = None
+queue_in = os.environ.get('SC_SQS_INPUT')
+queue_out = os.environ.get('SC_SQS_OUTPUT')
 
 
 def download_audio(event):
