@@ -11,7 +11,7 @@ logger.setLevel(logging.INFO)
 logger.addHandler(logging.StreamHandler(sys.stdout))
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-k = os.environ.get("K", 5)
+k = os.environ.get("TOPK", 5)
 thresh = os.environ.get('THRESH', .5)
 
 
