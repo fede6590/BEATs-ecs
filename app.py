@@ -44,7 +44,10 @@ def send_message_to_queue(message, file_key):
 def inference():
     global model
     if model is None:
+        t0 = time()
         model = load_model(location)
+        logger.info(f'Model ready ({round(time() - t0, 3)}s)')
+        del t0
     while True:
         try:
             response = sqs_client.receive_message(QueueUrl=queue_in, MaxNumberOfMessages=1, WaitTimeSeconds=1)
