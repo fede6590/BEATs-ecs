@@ -1,5 +1,5 @@
--f https://download.pytorch.org/whl/cpu/torchaudio-2.1.0%2Bcpu-cp311-cp311-linux_x86_64.whl#sha256=b78575dc4748e57046b396a85470bb3615fa7822b745ff091ded073bd036eb6e
--f https://download.pytorch.org/whl/cpu/torch-2.1.0%2Bcpu-cp311-cp311-linux_x86_64.whl#sha256=5954924ce74bc7e6a6c811e3fa4bdda9936d9889f6369fd068420c444bfd1cae
+-f https://download.pytorch.org/whl/cpu/torchaudio-2.1.2%2Bcpu-cp311-cp311-linux_x86_64.whl
+-f https://download.pytorch.org/whl/cpu/torch-2.1.2%2Bcpu-cp311-cp311-linux_x86_64.whl
 torch~=2.1
 torchaudio~=2.1
 numpy~=1.25
